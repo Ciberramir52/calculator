@@ -1,6 +1,7 @@
-let firstNumber = "";
-let secondNumber = "";
-let temporalNumber = "";
+let firstNumber = "0";
+let secondNumber = "0";
+let operator = "";
+let temporalNumber = "0";
 
 const oneButton = document.querySelector('#one');
 const twoButton = document.querySelector('#two');
@@ -13,6 +14,15 @@ const eightButton = document.querySelector('#eight');
 const nineButton = document.querySelector('#nine');
 const zeroButton = document.querySelector('#zero');
 const dotButton = document.querySelector('#dot');
+
+const addButton = document.querySelector('#add');
+const substractButton = document.querySelector('#substract');
+const multiplyButton = document.querySelector('#multiply');
+const divideButton = document.querySelector('#divide');
+const equalButton = document.querySelector('#equal');
+const ACButton = document.querySelector('#ac');
+const posNegButton = document.querySelector('#pos-neg');
+
 const screen = document.querySelector('#screen');
 
 oneButton.addEventListener('click', () => numberPressed('1'));
@@ -27,9 +37,13 @@ nineButton.addEventListener('click', () => numberPressed('9'));
 zeroButton.addEventListener('click', () => numberPressed('0'));
 dotButton.addEventListener('click', () => numberPressed('.'));
 
-
-
-let num1, operator, num2;
+addButton.addEventListener('click', () => operatorPressed('+'));
+substractButton.addEventListener('click', () => operatorPressed('-'));
+multiplyButton.addEventListener('click', () => operatorPressed('x'));
+divideButton.addEventListener('click', () => operatorPressed('÷'));
+equalButton.addEventListener('click', () => result());
+ACButton.addEventListener('click', () => clearScreen());
+posNegButton.addEventListener('click', () => makeNegative());
 
 const add = (a, b) => {
     return a + b;
@@ -44,39 +58,58 @@ const multiply = (a, b) => {
 }
 
 const divide = (a, b) => {
-    try {
-        return a / b;
-    } catch (err) {
-        alert("Can't divide with 0");
-    }
+    if (b === 0) return NaN;
+    return a / b;
 }
 
 const operate = (op, a, b) => {
+    a = Number(a);
+    b = Number(b);
     switch(op){
         case "+":
-            add(a, b);
-            break;
+            return add(a, b);
         case "-":
-            substract(a, b);
-            break;
+            return substract(a, b);
         case "x":
-            multiply(a, b);
-            break;
-        case "/":
-            divide(a, b);
-            break;
+            return multiply(a, b);
+        case "÷":
+            return divide(a, b);
         default:
             return a;
     }
 }
 
+const result = () => {
+    secondNumber = screen.textContent;
+    temporalNumber = operate(operator, firstNumber, secondNumber);
+    screen.innerText = temporalNumber.toFixed(2);
+    temporalNumber = "0";
+    console.log(temporalNumber);
+}
+
 const numberPressed = (number) => {
-    if (number === "." && temporalNumber.length === 0) {
-        temporalNumber = "0.";
-        screen.innerText = temporalNumber;
-        return;
-    }
-    if (number === "0" && temporalNumber.length === 0) return;
-    temporalNumber += number;
+    if (number === "0" && temporalNumber === "0") temporalNumber = "0";
+    else if(temporalNumber === "0" && number !== ".") temporalNumber = number;
+    else temporalNumber += number;
+    screen.innerText = temporalNumber;
+}
+
+const operatorPressed = (op) => {
+    operator = op;
+    firstNumber = screen.textContent;
+    temporalNumber = "0";
+}
+
+const clearScreen = () => {
+    firstNumber = "0";
+    secondNumber = "0";
+    operator = "";
+    temporalNumber = "0";
+    screen.innerText = temporalNumber;
+}
+
+const makeNegative = () => {
+    if (temporalNumber === "0") return;
+    temporalNumber = "-" + temporalNumber;
     screen.innerText = temporalNumber;
 }

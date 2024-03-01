@@ -10,6 +10,7 @@ button {
 }
 
 #screen {
+    text-align: right;
     background-color: black;
     color: white;
     font-size: 28px;
